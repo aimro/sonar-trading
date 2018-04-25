@@ -54,6 +54,7 @@ public class ContrarianStrategy implements TradesObserver {
 			if (trade.getPrice() > lastPrice) {
 
 				upTicks++;
+				log.debug("UpTick, upTicks: {}, downTicks: {}", upTicks, downTicks);
 				
 				if (upTicks >= 3) {
 					upTicks = 0;
@@ -65,6 +66,7 @@ public class ContrarianStrategy implements TradesObserver {
 			} else if (trade.getPrice() < lastPrice) {
 
 				downTicks++;
+				log.debug("DownTick, upTicks: {}, downTicks: {}", upTicks, downTicks);
 
 				if (downTicks >= 3) {
 					downTicks = 0;

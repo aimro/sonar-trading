@@ -17,7 +17,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
-import com.sonartrading.challenge.api.RestClient;
+import com.sonartrading.challenge.api.RestAPI;
 import com.sonartrading.challenge.api.dto.BitsoResponse;
 import com.sonartrading.challenge.api.dto.OrderBook;
 import com.sonartrading.challenge.api.dto.OrderBookItem;
@@ -50,7 +50,7 @@ public class OrdersManager implements WebsocketHandler {
 	private final Gson gson = new Gson();
 
 	private final String book;
-	private final RestClient restClient;
+	private final RestAPI restAPI;
 
 	private Object diffOrdersLock = new Object();
 	private List<DiffOrder> diffOrders = new LinkedList<>();
@@ -74,11 +74,11 @@ public class OrdersManager implements WebsocketHandler {
 
 	private final ExecutorService executorService;
 
-	public OrdersManager(String book, RestClient restClient, WebsocketClient websocketClient,
+	public OrdersManager(String book, RestAPI restAPI, WebsocketClient websocketClient,
 			ExecutorService executorService) {
 
 		this.book = book;
-		this.restClient = restClient;
+		this.restAPI = restAPI;
 		this.executorService = executorService;
 
 		websocketClient.addHandler(book, DIFF_ORDERS_SUSCRIPTION, OrdersManager.this);
@@ -90,7 +90,7 @@ public class OrdersManager implements WebsocketHandler {
 
 	private void getOrderBook() {
 
-		restClient.getAPI().getOpenOrders(book, false).enqueue(new Callback<BitsoResponse<OrderBook>>() {
+		restAPI.getOpenOrders(book, false).enqueue(new Callback<BitsoResponse<OrderBook>>() {
 
 			@Override
 			public void onResponse(Call<BitsoResponse<OrderBook>> call, Response<BitsoResponse<OrderBook>> response) {

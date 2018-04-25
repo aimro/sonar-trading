@@ -34,8 +34,8 @@ public class SonarTrading extends Application {
 		RestClient restClient = new RestClient(HTTP_ENDPOINT);
 		WebsocketClient websocketClient = new WebsocketClient(WEBSOCKET_ENDPOINT);
 
-		TradesManager tradesManager = new TradesManager(BOOK, restClient, executorService);
-		OrdersManager ordersManager = new OrdersManager(BOOK, restClient, websocketClient, executorService);
+		TradesManager tradesManager = new TradesManager(BOOK, restClient.getAPI(), executorService);
+		OrdersManager ordersManager = new OrdersManager(BOOK, restClient.getAPI(), websocketClient, executorService);
 
 		FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(MAIN_SCENE_FXML));
 

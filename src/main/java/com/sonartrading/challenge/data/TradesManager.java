@@ -10,8 +10,8 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import com.sonartrading.challenge.api.RestAPI;
 import com.sonartrading.challenge.api.RestAPI.SortType;
-import com.sonartrading.challenge.api.RestClient;
 import com.sonartrading.challenge.api.dto.BitsoResponse;
 import com.sonartrading.challenge.api.dto.TradeBook;
 import com.sonartrading.challenge.data.model.MakerSide;
@@ -34,7 +34,7 @@ public class TradesManager {
 	public static final int DEFAULT_TRADES_TO_OBSERVE = 10;
 
 	private final String book;
-	private final RestClient restClient;
+	private final RestAPI restAPI;
 
 	private final List<TradesObserver> tradesObservers = new ArrayList<>();
 
@@ -48,10 +48,10 @@ public class TradesManager {
 	// these values could be modified by ui while is used by manager
 	private volatile int numOfTradesToObserve = DEFAULT_TRADES_TO_OBSERVE;
 
-	public TradesManager(String book, RestClient restClient, ExecutorService executorService) {
+	public TradesManager(String book, RestAPI restAPI, ExecutorService executorService) {
 
 		this.book = book;
-		this.restClient = restClient;
+		this.restAPI = restAPI;
 		this.executorService = executorService;
 	}
 
@@ -59,7 +59,7 @@ public class TradesManager {
 
 	private void getRecentTrades() {
 
-		restClient.getAPI().getRecentTrades(book, SortType.DESC, numOfTradesToObserve)
+		restAPI.getRecentTrades(book, SortType.DESC, numOfTradesToObserve)
 				.enqueue(new Callback<BitsoResponse<List<TradeBook>>>() {
 
 					@Override
